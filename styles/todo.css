@@ -1,0 +1,48 @@
+.todo {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: white;
+  width: 95%;
+}
+
+.todo__header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+.todo__title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.todo__btn-edit,
+.todo__btn-back {
+  margin-left: auto;
+}
+
+.btn--remove-done {
+  margin-left: auto;
+}
+
+.todo__desc {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.todo__info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.todo__user,
+.todo__date {
+  font-size: 20px;
+}
