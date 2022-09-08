@@ -29,6 +29,9 @@ export class DOM {
   }
 
   append(element) {
+	if (element instanceof DOM){
+		element = element.$el;
+	}
 	this.$el.append(element)
   }
 

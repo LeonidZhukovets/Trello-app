@@ -14,7 +14,8 @@ export class Desks extends User {
 				const createTemplate = $(document.importNode(createDeskTemplate.$el.content, true))
 				const title = createTemplate.find('[data-todo-title]');
 				title.text(el.title);
-				createContentDesk.append(createTemplate.$el)
+
+				createContentDesk.append(createTemplate)
 			})
 		}
 	}
