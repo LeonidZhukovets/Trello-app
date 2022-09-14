@@ -1,95 +1,98 @@
+
+import { API } from "./API.js";
+import { ERROR_WHILE_MOVING } from "./constants.js";
 import { $ } from "./DOM.js";
 import {
-  createContentDesk,
-  createDeskCount,
-  createDeskTemplate,
-  doneContentDesk,
-  doneDeskCount,
-  doneDeskTemplate,
-  progressContentDesk,
-  progressDeskCount,
-  progressDeskTemplate,
+	createContentDesk,
+	createDeskCount,
+	createDeskTemplate,
+	doneContentDesk,
+	doneDeskCount,
+	doneDeskTemplate,
+	progressContentDesk,
+	progressDeskCount,
+	progressDeskTemplate,
 } from "./elements.js";
 
 export class DesksLogic {
-  constructor(user) {
-    this.user = user;
-    this.desks = user.desks;
-  }
+	constructor(user, fetcher, appendDesks) {
+		this.user = user;
+		this.desks = user.desks;
+		this.ID = user.id;
+		this.fetcher = fetcher;
+		this.appendDesks = appendDesks
+	}
 
-  appendCreateTodos() {
-    const { create } = this.desks;
+	applyContent(el, template) {
+		const title = template.find("[data-todo-title]");
+		title.text(el.title);
 
-    createDeskCount.text(create.length);
+		const desc = template.find("[data-todo-desc-content]");
+		desc.text(el.desc);
 
-    create.forEach((el) => {
-      const createTemplate = $(
-        document.importNode(createDeskTemplate.$el.content, true)
-      );
-      const title = createTemplate.find("[data-todo-title]");
-      title.text(el.title);
+		const userName = template.find("[data-todo-user]");
+		userName.text(this.user.name);
 
-      const desc = createTemplate.find("[data-todo-desc-content]");
-      desc.text(el.desc);
+		const todoDate = template.find("[data-todo-date]");
+		todoDate.text(el.date);
+	}
 
-      const userName = createTemplate.find("[data-todo-user]");
-      userName.text(this.user.name);
+	appendCreateTodos() {
+		const { create } = this.desks;
 
-      const todoDate = createTemplate.find("[data-todo-date]");
-      todoDate.text(el.date);
+		createDeskCount.text(create.length);
 
-      createContentDesk.append(createTemplate);
-    });
-  }
+		create.forEach((el) => {
+			const createTemplate = $(document.importNode(createDeskTemplate.$el.content, true));
+			this.applyContent(el, createTemplate);
 
-  appendProgressTodos() {
-    const { progress } = this.desks;
+			const btnMove = createTemplate.find('[data-todo-btn-move]');
+			btnMove.addEvent('click', () => {
+				const create = this.desks.create
+					.filter(todo => todo.id !== el.id)
+				const progress = [...this.desks.progress, el];
+				const newDesks = { ...this.desks, create, progress };
 
-    progressDeskCount.text(progress.length);
+				this.fetcher(
+					() => API.putUser(this.ID, { desks: newDesks }),
+					this.appendDesks,
+					ERROR_WHILE_MOVING
+				)
+			})
 
-    progress.forEach((el) => {
-      const progressTemplate = $(
-        document.importNode(progressDeskTemplate.$el.content, true)
-      );
+			createContentDesk.append(createTemplate);
+		});
+	}
 
-      const title = progressTemplate.find("[data-todo-title]");
-      title.text(el.title);
+	appendProgressTodos() {
+		const { progress } = this.desks;
 
-      const desc = progressTemplate.find("[data-todo-desc-content]");
-      desc.text(el.desc);
+		progressDeskCount.text(progress.length);
 
-      const userName = progressTemplate.find("[data-todo-user]");
-      userName.text(this.user.name);
+		progress.forEach((el) => {
+			const progressTemplate = $(
+				document.importNode(progressDeskTemplate.$el.content, true)
+			);
 
-      const todoDate = progressTemplate.find("[data-todo-date]");
-      todoDate.text(el.date);
+			this.applyContent(el, progressTemplate);
 
-      progressContentDesk.append(progressTemplate);
-    });
-  }
+			progressContentDesk.append(progressTemplate);
+		});
+	}
 
-  appendDoneTodos() {
-    const { done } = this.desks;
+	appendDoneTodos() {
+		const { done } = this.desks;
 
-    doneDeskCount.text(done.length);
+		doneDeskCount.text(done.length);
 
-    done.forEach((el) => {
-      const doneTemplate = $(
-        document.importNode(doneDeskTemplate.$el.content, true)
-      );
-      const title = doneTemplate.find("[data-todo-title]");
-      title.text(el.title);
+		done.forEach((el) => {
+			const doneTemplate = $(
+				document.importNode(doneDeskTemplate.$el.content, true)
+			);
 
-      const desc = doneTemplate.find("[data-todo-desc-content]");
-      desc.text(el.desc);
+			this.applyContent(el, doneTemplate);
 
-      const userName = doneTemplate.find("[data-todo-user]");
-      userName.text(this.user.name);
-
-      const todoDate = doneTemplate.find("[data-todo-date]");
-      todoDate.text(el.date);
-
-      doneContentDesk.append(doneTemplate);
-    });
-  }
+			doneContentDesk.append(doneTemplate);
+		});
+	}
 }

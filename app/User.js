@@ -1,3 +1,5 @@
+import { Modal } from "./Modal.JS";
+
 export class User {
 	#user = {};
 	#desks = {};
@@ -16,8 +18,8 @@ export class User {
 	}
 
 	set user(user) {
-		if (typeof user !== 'undefined') {
-		this.#user = user;
+		if (typeof user !== "undefined") {
+			this.#user = user;
 		}
 	}
 
@@ -26,21 +28,19 @@ export class User {
 	}
 
 	set desks(desks) {
-		if (typeof desks !== 'undefined') {
+		if (typeof desks !== "undefined") {
 			this.#desks = desks;
+		}
 	}
-}
 
-	async fetcher(callback, appendDesks) {
+	async fetcher(callback, appendDesks, message = '') {
 		try {
 			const user = await callback();
 			this.user = user;
 			this.desks = user.desks;
 			appendDesks();
-
-		
-		} catch(e) {
-			console.error('fetcher(): ', e.message);
+		} catch (e) {
+			Modal.addErrorLayout(`${message}: ${e.message}`);
 		}
 	}
 }

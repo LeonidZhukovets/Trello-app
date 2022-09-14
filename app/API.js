@@ -1,7 +1,7 @@
 export class API {
 	static #route = 'https://6318d3f2f6b281877c77be1d.mockapi.io/users/'
 
-	static async getUsers(){
+	static async getUsers() {
 		const response = await fetch(API.#route);
 		if (response.ok) {
 			const todos = await response.json();
@@ -15,7 +15,7 @@ export class API {
 		const response = await fetch(API.#route + userID);
 		if (response.ok) {
 			const user = await response.json();
-				return user;
+			return user;
 		} else {
 			throw new Error(response.statusText)
 		}
@@ -38,7 +38,6 @@ export class API {
 
 		if (response.ok) {
 			const user = await response.json();
-			console.log(user)
 			return user;
 		} else {
 			throw new Error(response.statusText)
