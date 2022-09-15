@@ -1,6 +1,6 @@
 
 import { API } from "./API.js";
-import { ERROR_WHILE_MOVING } from "./constants.js";
+import { ERROR_WHILE_MOVING, ERROR_WHILE_REMOVING } from "./constants.js";
 import { $ } from "./DOM.js";
 import {
 	createContentDesk,
@@ -37,6 +37,14 @@ export class DesksLogic {
 		todoDate.text(el.date);
 	}
 
+	putFetcher(desks, message = '') {
+		this.fetcher(
+			() => API.putUser(this.ID, { desks }),
+			this.appendDesks,
+			message
+		)
+	}
+
 	appendCreateTodos() {
 		const { create } = this.desks;
 
@@ -53,12 +61,11 @@ export class DesksLogic {
 				const progress = [...this.desks.progress, el];
 				const newDesks = { ...this.desks, create, progress };
 
-				this.fetcher(
-					() => API.putUser(this.ID, { desks: newDesks }),
-					this.appendDesks,
-					ERROR_WHILE_MOVING
-				)
-			})
+				this.putFetcher(newDesks, ERROR_WHILE_MOVING)
+			});
+
+			const btnRemove = createTemplate.find('[data-todo-btn-remove]');
+			btnRemove.addEvent('click', () => this.removeTodo('create', el));
 
 			createContentDesk.append(createTemplate);
 		});
@@ -73,8 +80,30 @@ export class DesksLogic {
 			const progressTemplate = $(
 				document.importNode(progressDeskTemplate.$el.content, true)
 			);
-
 			this.applyContent(el, progressTemplate);
+
+			const btnMove = progressTemplate.find('[data-todo-btn-move]');
+			btnMove.addEvent('click', () => {
+				const progress = this.desks.progress
+					.filter(todo => todo.id !== el.id)
+				const done = [...this.desks.done, el];
+				const newDesks = { ...this.desks, progress, done };
+
+				this.putFetcher(newDesks, ERROR_WHILE_MOVING)
+			});
+
+			const btnBack = progressTemplate.find('[data-todo-btn-back]');
+			btnBack.addEvent('click', () => {
+				const progress = this.desks.progress
+					.filter(todo => todo.id !== el.id);
+				const create = [...this.desks.create, el];
+				const newDesks = { ...this.desks, create, progress };
+
+				this.putFetcher(newDesks, ERROR_WHILE_MOVING)
+			});
+
+			const btnRemove = progressTemplate.find('[data-todo-btn-remove]');
+			btnRemove.addEvent('click', () => this.removeTodo('progress', el));
 
 			progressContentDesk.append(progressTemplate);
 		});
@@ -89,10 +118,19 @@ export class DesksLogic {
 			const doneTemplate = $(
 				document.importNode(doneDeskTemplate.$el.content, true)
 			);
-
 			this.applyContent(el, doneTemplate);
+
+			const btnRemove = doneTemplate.find('[data-todo-btn-remove]');
+			btnRemove.addEvent('click', () => this.removeTodo('done', el));
 
 			doneContentDesk.append(doneTemplate);
 		});
+	}
+
+	removeTodo(deskType, el) {
+		const newTodo = this.desks[deskType]
+			.filter(todo => todo.id !== el.id);
+		const newDesks = { ...this.desks, [deskType]: newTodo };
+		this.putFetcher(newDesks, ERROR_WHILE_REMOVING);
 	}
 }
