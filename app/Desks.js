@@ -4,9 +4,10 @@ import {
 	createContentDesk,
 	progressContentDesk,
 	doneContentDesk,
+	btnRemoveAll,
 } from "./elements.js";
 import { User } from "./User.js";
-import { ERROR_FETCHING_USER } from "./constants.js";
+import { ERROR_FETCHING_USER, ERROR_WHILE_REMOVING } from "./constants.js";
 
 export class Desks extends User {
 	constructor(userID) {
@@ -32,25 +33,10 @@ export class Desks extends User {
 
 		const $logic = this.deskLogic();
 
-		const { create, progress, done } = this.desks;
+		$logic.appendCreateTodos();
+		$logic.appendProgressTodos();
+		$logic.appendDoneTodos();
 
-		if (create.length) {
-			$logic.appendCreateTodos();
-		} else {
-			createContentDesk.insertHTML("afterbegin", ` <p>No todos yet...</p>`);
-		}
-
-		if (progress.length) {
-			$logic.appendProgressTodos();
-		} else {
-			progressContentDesk.insertHTML("afterbegin", ` <p>No todos yet...</p>`);
-		}
-
-		if (done.length) {
-			$logic.appendDoneTodos();
-		} else {
-			doneContentDesk.insertHTML("afterbegin", ` <p>No todos yet...</p>`);
-		}
 	}
 
 	initialRender() {
@@ -59,5 +45,9 @@ export class Desks extends User {
 			this.appendDesks.bind(this),
 			ERROR_FETCHING_USER
 		);
+
+		btnRemoveAll.addEvent('click', () => {
+			this.deskLogic().removeAll();
+		})
 	}
 }

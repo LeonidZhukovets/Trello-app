@@ -15,16 +15,19 @@ const createContentDesk = $("[data-create-desk-content]");
 const progressContentDesk = $("[data-progress-desk-content]");
 const doneContentDesk = $("[data-done-desk-content]");
 
+const btnRemoveAll = $("[data-btn-remove-all]");
+
 export {
-  root,
-  clockLayout,
-  createDeskTemplate,
-  progressDeskTemplate,
-  doneDeskTemplate,
-  createDeskCount,
-  progressDeskCount,
-  doneDeskCount,
-  createContentDesk,
-  progressContentDesk,
-  doneContentDesk,
+	root,
+	clockLayout,
+	createDeskTemplate,
+	progressDeskTemplate,
+	doneDeskTemplate,
+	createDeskCount,
+	progressDeskCount,
+	doneDeskCount,
+	createContentDesk,
+	progressContentDesk,
+	doneContentDesk,
+	btnRemoveAll
 };

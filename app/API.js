@@ -1,3 +1,5 @@
+import { Modal } from "./Modal.JS";
+
 export class API {
 	static #route = 'https://6318d3f2f6b281877c77be1d.mockapi.io/users/'
 
@@ -11,10 +13,13 @@ export class API {
 		}
 	}
 
-	static async getUser(userID) {
-		const response = await fetch(API.#route + userID);
+	static async getUser(id) {
+		Modal.addLoaderLayout();
+
+		const response = await fetch(API.#route + id);
 		if (response.ok) {
 			const user = await response.json();
+			setTimeout(Modal.removeLoaderLayout, 1000);
 			return user;
 		} else {
 			throw new Error(response.statusText)
