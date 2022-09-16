@@ -5,6 +5,7 @@ import {
 	progressContentDesk,
 	doneContentDesk,
 	btnRemoveAll,
+	btnAddTodo,
 } from "./elements.js";
 import { User } from "./User.js";
 import { ERROR_FETCHING_USER, ERROR_WHILE_REMOVING } from "./constants.js";
@@ -48,6 +49,10 @@ export class Desks extends User {
 
 		btnRemoveAll.addEvent('click', () => {
 			this.deskLogic().removeAll();
+		})
+
+		btnAddTodo.addEvent('click', () => {
+			this.deskLogic().addNewTodo();
 		})
 	}
 }

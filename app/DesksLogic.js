@@ -1,7 +1,7 @@
 
 import { API } from "./API.js";
 import { Modal } from "./Modal.JS";
-import { ERROR_WHILE_MOVING, ERROR_WHILE_REMOVING } from "./constants.js";
+import { ERROR_WHILE_CREATING, ERROR_WHILE_EDITING, ERROR_WHILE_MOVING, ERROR_WHILE_REMOVING } from "./constants.js";
 import { $ } from "./DOM.js";
 import {
 	createContentDesk,
@@ -38,11 +38,11 @@ export class DesksLogic {
 		todoDate.text(el.date);
 	}
 
-	putFetcher(desks, message = '') {
+	putFetcher(desks, errorMessage = '') {
 		this.fetcher(
 			() => API.putUser(this.ID, { desks }),
 			this.appendDesks,
-			message
+			errorMessage
 		)
 	}
 
@@ -73,6 +73,23 @@ export class DesksLogic {
 
 				const btnRemove = createTemplate.find('[data-todo-btn-remove]');
 				btnRemove.addEvent('click', () => this.removeTodo('create', el));
+
+				const btnEdit = createTemplate.find('[data-todo-btn-edit]');
+				btnEdit.addEvent('click', () => {
+					const editTodo = (newEl) => {
+						const create = [...this.desks.create]
+							.map(todo => {
+								if (todo.id === el.id) {
+									return newEl
+								}
+								return todo;
+							});
+						const newDesks = { ...this.desks, create };
+						this.putFetcher(newDesks, ERROR_WHILE_EDITING);
+
+					}
+					Modal.addEditTodoLayout(el, editTodo);
+				})
 
 				createContentDesk.append(createTemplate);
 			});
@@ -155,10 +172,19 @@ export class DesksLogic {
 
 	removeAll() {
 		const remove = () => {
-			const newDesks = { ...this.desks, done: [] }
+			const newDesks = { ...this.desks, done: [] };
 			this.putFetcher(newDesks, ERROR_WHILE_REMOVING);
 
 		}
 		Modal.addWarningLayout(remove);
+	}
+
+	addNewTodo() {
+		const createTodo = (newTodo) => {
+			const create = [...this.desks.create, newTodo];
+			const newDesks = { ...this.desks, create };
+			this.putFetcher(newDesks, ERROR_WHILE_CREATING);
+		}
+		Modal.addNewTodoLayout(createTodo);
 	}
 }
