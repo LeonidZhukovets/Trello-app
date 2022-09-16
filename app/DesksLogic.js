@@ -176,7 +176,7 @@ export class DesksLogic {
 			this.putFetcher(newDesks, ERROR_WHILE_REMOVING);
 
 		}
-		Modal.addWarningLayout(remove);
+		Modal.addWarningRemoveLayout(remove);
 	}
 
 	addNewTodo() {
