@@ -5,7 +5,8 @@
   background-color: rgba(0, 255, 255, 0.589);
   padding: 10px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 20px;
   align-items: center;
   margin: 1rem auto;
 }
@@ -16,10 +17,17 @@
   text-shadow: var(--shadow);
 }
 
+.header__avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 35px;
+}
+
 .header__clock {
   width: 140px;
   height: 40px;
   background-color: bisque;
+  margin-left: auto;
   display: flex;
   justify-content: center;
   align-items: center;

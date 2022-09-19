@@ -18,6 +18,10 @@ const doneContentDesk = $("[data-done-desk-content]");
 const btnRemoveAll = $("[data-btn-remove-all]");
 const btnAddTodo = $("[data-btn-add-todo]");
 
+
+const headerUserName = $("[data-header-user-name]");
+const headerAvatar = $("[data-header-avatar]");
+
 export {
 	root,
 	clockLayout,
@@ -31,5 +35,7 @@ export {
 	progressContentDesk,
 	doneContentDesk,
 	btnRemoveAll,
-	btnAddTodo
+	btnAddTodo,
+	headerUserName,
+	headerAvatar
 };

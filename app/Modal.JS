@@ -1,12 +1,14 @@
 import { DOM } from "./DOM.js";
 import { root } from "./elements.js";
 import { getDate } from "./utils/date.utils.js";
+import { Desks } from './Desks.js';
 
 export class Modal {
 	static #errorLayout;
 	static #loader;
 	static #warningModal;
 	static #newTodoLayout;
+	static #usersForm;
 
 	static addLoaderLayout() {
 		const loaderLayout = DOM.create("div", "modal", "modal--toggle");
@@ -203,5 +205,39 @@ export class Modal {
 		Modal.#newTodoLayout = editTodoElement;
 
 		root.insertElement("afterend", editTodoElement);
+	}
+
+	static addUserListLayout(desksInstance) {
+		const list = DOM.create("div", "modal", "modal--toggle");
+		const usersForm = DOM.create("form", "user-selection");
+		usersForm.insertHTML('afterbegin', `
+			<label for="user-select">Choose a user:</label>
+
+			<select name="users" id="user-select">
+				<option value="">--Please choose an option--</option>
+				<option value="1">Brenda Murphy</option>
+				<option value="2">Luke McDermott</option>
+				<option value="3">Hazel Feeney</option>
+			</select>
+		`)
+
+		usersForm.addEvent('change', (e) => {
+			const value = e.target.value.trim()
+			if (value) {
+				new desksInstance(value).initialRender();
+				this.removeUserListLayout();
+			}
+		})
+
+		Modal.#usersForm = list;
+
+		list.append(usersForm);
+
+		root.insertElement("afterend", list);
+	}
+	static removeUserListLayout() {
+		if (Modal.#usersForm) {
+			Modal.#usersForm.remove();
+		}
 	}
 }

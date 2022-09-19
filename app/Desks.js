@@ -6,6 +6,8 @@ import {
 	doneContentDesk,
 	btnRemoveAll,
 	btnAddTodo,
+	headerUserName,
+	headerAvatar
 } from "./elements.js";
 import { User } from "./User.js";
 import { ERROR_FETCHING_USER, ERROR_WHILE_REMOVING } from "./constants.js";
@@ -31,6 +33,8 @@ export class Desks extends User {
 
 	appendDesks() {
 		this.clearDesks();
+		headerUserName.text(this.user.name);
+		headerAvatar.$el.src = this.user.avatar;
 
 		const $logic = this.deskLogic();
 
