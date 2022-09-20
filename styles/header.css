@@ -1,14 +1,15 @@
 .header {
   width: 90%;
-  height: 100px;
+  height: 90px;
   border-radius: 10px;
-  background-color: rgba(0, 255, 255, 0.589);
+  background-color: rgba(39, 153, 153, 0.329);
   padding: 10px;
   display: flex;
   justify-content: flex-start;
   gap: 20px;
   align-items: center;
   margin: 1rem auto;
+  box-shadow: var(--shadow);
 }
 
 .header__title {
@@ -20,13 +21,13 @@
 .header__avatar {
   width: 70px;
   height: 70px;
-  border-radius: 35px;
+  border-radius: 50%;
 }
 
 .header__clock {
   width: 140px;
   height: 40px;
-  background-color: bisque;
+  background-color: rgba(229, 255, 196, 0.801);
   margin-left: auto;
   display: flex;
   justify-content: center;

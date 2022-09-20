@@ -3,10 +3,20 @@
 }
 .body {
   font-family: "Noto Sans", sans-serif;
-  width: 100%;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: aqua;
 }
 
 .container {
-  max-width: 90%;
+  width: 90%;
   margin: 0 auto;
+}
+
+@media (max-width: 1110px) {
+  body {
+    overflow-y: scroll;
+  }
 }
